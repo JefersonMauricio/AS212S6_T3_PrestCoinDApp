@@ -1,0 +1,46 @@
+.card-container {
+  display: flex;
+  flex-direction: row; /* Ajusta la dirección de los elementos a una fila */
+  justify-content: center; /* Centra los elementos en el eje horizontal */
+  align-items: center; /* Centra los elementos en el eje vertical */
+  height: 100vh; /* Asegura que el contenedor ocupe toda la altura de la vista */
+}
+
+.card {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 50%; /* Aumenta el ancho de la tarjeta a un 80% del contenedor */
+  margin: 10px;
+  padding: 100px; /* Aumenta el padding de la tarjeta */
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.card h2 {
+  text-align: center;
+}
+
+.card input {
+  width: 100%;
+  padding: 10px; /* Aumenta el padding del campo de entrada */
+  margin: 5px 0;
+}
+
+.card button {
+  width: 100%;
+  padding: 10px;
+  background-color: #45a049;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.card button:hover {
+  background-color: #39843b;
+}

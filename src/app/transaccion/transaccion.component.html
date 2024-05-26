@@ -1,0 +1,21 @@
+<div class="card-container">
+  <div class="card" *ngIf="accountInfo">
+    <h2>Información de la cuenta</h2>
+    <p>Dirección: {{ accountInfo.address }}</p>
+    <p>Saldo: {{ accountInfo.balance | number:'1.2-2' }} ETH</p>
+  </div>
+
+  <div class="card">
+    <h2>Solicitar Préstamo</h2>
+    <input type="text" [(ngModel)]="destinatario" placeholder="Destinatario">
+    <input type="number" [(ngModel)]="monto" placeholder="Monto">
+    <input type="number" [(ngModel)]="interes" placeholder="Interés">
+    <!-- Botón "Solicitar" eliminado -->
+  </div>
+
+  <div class="card">
+    <h2>Aceptar Préstamo Destinatario</h2>
+    <input type="text" [(ngModel)]="prestatario" placeholder="Prestatario">
+    <button (click)="aceptarPrestamoDestinatario(prestatario)">Aceptar</button>
+  </div>
+</div>
