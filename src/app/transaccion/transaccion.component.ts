@@ -1,6 +1,8 @@
 import { Web3Service } from './../service/web3.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'app-transaccion',
