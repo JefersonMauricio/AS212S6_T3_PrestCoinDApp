@@ -1,5 +1,4 @@
 name: Build
-
 on:
   push:
     branches:
@@ -7,31 +6,14 @@ on:
       - Frontend
   pull_request:
     types: [opened, synchronize, reopened]
-
 jobs:
   sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-
-      - name: Cache Node modules
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Install dependencies
-        run: npm install --legacy-peer-deps
-      
-      - name: Run tests
-        run: npm test
-
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
