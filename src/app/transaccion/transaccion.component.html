@@ -1,21 +1,58 @@
-<div class="card-container">
-  <div class="card" *ngIf="accountInfo">
-    <h2>Información de la cuenta</h2>
-    <p>Dirección: {{ accountInfo.address }}</p>
-    <p>Saldo: {{ accountInfo.balance | number:'1.2-2' }} ETH</p>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PRESTCOIN</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+</head>
+<body style="height: 100vh; margin: 0; display: flex; align-items: center; justify-content: center;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <!-- Card para la información del usuario -->
+        <div class="card mb-4 shadow-lg">
+          <div class="card-header header-blockchain text-center">
+            <h4><i class="fas fa-user-circle"></i> Datos del Usuario</h4>
+          </div>
+          <div class="card-body">
+            <div class="mb-4">
+              <h5><i class="fas fa-user"></i> Dirección de la cuenta de usuario</h5>
+              <p class="text-muted">{{ address }}</p>
+            </div>
+            <div class="mb-4">
+              <h5><i class="fas fa-wallet"></i> Saldo de cuenta del usuario</h5>
+              <p class="text-muted">{{ balance }} ETH</p>
+            </div>
+          </div>
+        </div>
+        <!-- Card para el formulario de transacción -->
+        <div class="card shadow-lg">
+          <div class="card-header header-blockchain text-center">
+            <h2><i class="fas fa-exchange-alt"></i> Solicitar Prestamo</h2>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="transactionForm" (ngSubmit)="sendTransaction()">
+              <div class="form-group">
+                <label for="toAddress"><i class="fas fa-arrow-right"></i> Dirección de destino</label>
+                <input type="text" id="toAddress" class="form-control" formControlName="toAddress" placeholder="Ingrese la dirección de destino">
+              </div>
+              <div class="form-group mt-4">
+                <label for="amount"><i class="fas fa-coins"></i> Cantidad (ETH)</label>
+                <input type="number" id="amount" class="form-control" formControlName="amount" placeholder="Ingrese la cantidad">
+              </div>
+              <button type="submit" class="btn btn-primary btn-block mt-4"><i class="fas fa-paper-plane"></i> Enviar transacción</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="card">
-    <h2>Solicitar Préstamo</h2>
-    <input type="text" [(ngModel)]="destinatario" placeholder="Destinatario">
-    <input type="number" [(ngModel)]="monto" placeholder="Monto">
-    <input type="number" [(ngModel)]="interes" placeholder="Interés">
-    <!-- Botón "Solicitar" eliminado -->
-  </div>
-
-  <div class="card">
-    <h2>Aceptar Préstamo Destinatario</h2>
-    <input type="text" [(ngModel)]="prestatario" placeholder="Prestatario">
-    <button (click)="aceptarPrestamoDestinatario(prestatario)">Aceptar</button>
-  </div>
-</div>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

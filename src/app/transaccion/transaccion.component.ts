@@ -1,6 +1,6 @@
+import { Web3Service } from './../service/web3.service';
 import { Component, OnInit } from '@angular/core';
-import { Web3Service } from '../service/web3.service';
-import AccountWeb3Model from '../model/account.web3.model';
+import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-transaccion',
@@ -8,71 +8,35 @@ import AccountWeb3Model from '../model/account.web3.model';
   styleUrls: ['./transaccion.component.css']
 })
 export class TransaccionComponent implements OnInit {
-  destinatario: string = '';
-  prestatario: string = '';
-  monto: number = 0;
-  interes: number = 0;
-  idPrestamo: number = 0;
+  transactionForm = new FormGroup({
+    toAddress: new FormControl(''),
+    amount: new FormControl(0),
+  });
 
-  accountInfo: AccountWeb3Model = new AccountWeb3Model();
+  address: string = ''; // Inicializa con una cadena vacía
+  balance: number = 0; // Inicializa con 0
 
-  constructor(private web3Service: Web3Service) { }
+  constructor(private Web3Service: Web3Service) { }
 
-  async ngOnInit(): Promise<void> {
-    await this.web3Service.connectAccount();
-    this.accountInfo = await this.web3Service.getAccountInfo();
-    if (await this.web3Service.isConnected()) {
-      console.log('La cuenta está conectada');
-    } else {
-      console.log('La cuenta no está conectada');
+  async ngOnInit() {
+    this.address = await this.Web3Service.getAddress();
+    this.balance = await this.Web3Service.getBalance();
+    console.log('Dirección en el componente:', this.address);
+    console.log('Saldo en el componente:', this.balance);
+  }
+
+  async sendTransaction() {
+    const toAddress = this.transactionForm?.get('toAddress')?.value;
+    const amount = this.transactionForm?.get('amount')?.value;
+  
+    if (toAddress && amount) {
+      try {
+        await this.Web3Service.sendTransaction(toAddress, amount);
+        // Actualizar el saldo después de la transacción
+        this.balance = await this.Web3Service.getBalance();
+      } catch (error) {
+        console.error('Error al enviar la transacción:', error);
+      }
     }
-  }
-
-  connectAccount() {
-    this.web3Service.connectAccount().then(() => {
-      this.web3Service.getAccountInfo().then(account => {
-        this.accountInfo = account;
-      });
-    });
-  }
-
-  solicitarPrestamo(destinatario: string, monto: number, interes: number) {
-    this.web3Service.solicitarPrestamo(destinatario, monto, interes).then(result => {
-      console.log(result);
-    }).catch(error => {
-      console.error(error);
-    });
-  }
-
-  aceptarPrestamo(prestatario: string) {
-    this.web3Service.aceptarPrestamo(prestatario).then(result => {
-      console.log(result);
-    }).catch(error => {
-      console.error(error);
-    });
-  }
-
-  aceptarPrestamoDestinatario(prestatario: string) {
-    this.web3Service.aceptarPrestamoDestinatario(prestatario).then(result => {
-      console.log(result);
-    }).catch(error => {
-      console.error(error);
-    });
-  }
-
-  pagarPrestamo(monto: number) {
-    this.web3Service.pagarPrestamo(monto).then(result => {
-      console.log(result);
-    }).catch(error => {
-      console.error(error);
-    });
-  }
-
-  consultarPrestamo(prestatario: string) {
-    this.web3Service.consultarPrestamo(prestatario).then(result => {
-      console.log(result);
-    }).catch(error => {
-      console.error(error);
-    });
   }
 }

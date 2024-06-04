@@ -71,11 +71,5 @@
   .ng-select.ng-select-single .ng-value-container {
     padding-top: 6px; /* Ajusta el espacio entre el valor seleccionado y el borde del contenedor */
   }
-
-  body {
-    background-image: url('https://img.freepik.com/vector-premium/concepto-isometrico-prestamos-dinero-prestamos-bancarios-linea-documento-prestamo-acuerdo-boligrafo-firmar_589019-3892.jpg');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-  }
+  
   

@@ -1,8 +1,6 @@
-import { Inject, Injectable } from '@angular/core';
-import { WEB3 } from '../core/web3';
-import { Subject } from 'rxjs';
+import { Injectable } from '@angular/core';
+
 import Web3 from 'web3';
-import AccountWeb3Model from '../model/account.web3.model';
 
 declare let window: any;
 
@@ -10,324 +8,116 @@ declare let window: any;
   providedIn: 'root'
 })
 export class Web3Service {
-
-  public accountsObservable = new Subject<AccountWeb3Model[]>();
-  private accountsLoaded: AccountWeb3Model[] = [];
-  public web3js: any;
-  public contract: any;
-
-  constructor(@Inject(WEB3) public web3: Web3) {
-    window.addEventListener('load', () => {
-      console.log("Observing accounts!!")
-      setInterval(() => this.refreshAccounts(), 1000);
-    });
-  }
-
-  async connectAccount(): Promise<void> {
-    if (window.ethereum) {
-      try {
-        await window.ethereum.enable();
-        this.web3js = new Web3(window.ethereum);
-        this.initializeContract();
-      } catch (error) {
-        console.error('User denied account access', error);
-      }
-    } else if (window.web3) {
-      this.web3js = new Web3(window.web3.currentProvider);
-      this.initializeContract();
-    } else {
-      alert('¿Sin web3? ¡Deberías considerar probar MetaMask!');
-    }
-  }
-
-  private initializeContract() {
-    const contractABI: any[] = [
-      [
+  private web3!: Web3;
+  private contract: any;
+  private contractAddress : any;
+  private ABI = [
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [
         {
-          "inputs": [],
-          "name": "aceptarPrestamo",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
+          "internalType": "address payable",
+          "name": "_beneficiario",
+          "type": "address"
         },
         {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_prestatario",
-              "type": "address"
-            }
-          ],
-          "name": "aceptarPrestamoDestinatario",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "remitente",
-              "type": "address"
-            },
-            {
-              "indexed": false,
-              "internalType": "uint256",
-              "name": "monto",
-              "type": "uint256"
-            }
-          ],
-          "name": "FondosRecibidos",
-          "type": "event"
-        },
-        {
-          "inputs": [],
-          "name": "pagarPrestamo",
-          "outputs": [],
-          "stateMutability": "payable",
-          "type": "function"
-        },
-        {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "prestatario",
-              "type": "address"
-            },
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "prestamista",
-              "type": "address"
-            }
-          ],
-          "name": "PrestamoAceptado",
-          "type": "event"
-        },
-        {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "prestatario",
-              "type": "address"
-            },
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "prestamista",
-              "type": "address"
-            },
-            {
-              "indexed": false,
-              "internalType": "uint256",
-              "name": "monto",
-              "type": "uint256"
-            }
-          ],
-          "name": "PrestamoPagado",
-          "type": "event"
-        },
-        {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "prestatario",
-              "type": "address"
-            },
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "destinatario",
-              "type": "address"
-            },
-            {
-              "indexed": false,
-              "internalType": "uint256",
-              "name": "monto",
-              "type": "uint256"
-            },
-            {
-              "indexed": false,
-              "internalType": "uint256",
-              "name": "interes",
-              "type": "uint256"
-            }
-          ],
-          "name": "PrestamoSolicitado",
-          "type": "event"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_destinatario",
-              "type": "address"
-            },
-            {
-              "internalType": "uint256",
-              "name": "_monto",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "_interes",
-              "type": "uint256"
-            }
-          ],
-          "name": "solicitarPrestamo",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "address",
-              "name": "remitente",
-              "type": "address"
-            },
-            {
-              "indexed": false,
-              "internalType": "uint256",
-              "name": "monto",
-              "type": "uint256"
-            }
-          ],
-          "name": "TransaccionNoReconocida",
-          "type": "event"
-        },
-        {
-          "stateMutability": "payable",
-          "type": "fallback"
-        },
-        {
-          "stateMutability": "payable",
-          "type": "receive"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "name": "prestamos",
-          "outputs": [
-            {
-              "internalType": "address",
-              "name": "prestatario",
-              "type": "address"
-            },
-            {
-              "internalType": "address",
-              "name": "destinatario",
-              "type": "address"
-            },
-            {
-              "internalType": "address",
-              "name": "prestamista",
-              "type": "address"
-            },
-            {
-              "internalType": "uint256",
-              "name": "monto",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "interes",
-              "type": "uint256"
-            },
-            {
-              "internalType": "bool",
-              "name": "aceptado",
-              "type": "bool"
-            },
-            {
-              "internalType": "bool",
-              "name": "pagado",
-              "type": "bool"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
+          "internalType": "uint256",
+          "name": "_cantidad",
+          "type": "uint256"
         }
-      ]
-    ];
-    const contractAddress = ""; // Dirección de tu contrato
-    this.contract = new this.web3js.eth.Contract(contractABI, contractAddress);
-  }
-
-  public isConnected(): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      if (this.web3js) {
-        resolve(true);
-      }
-      resolve(false);
-    });
-  }
-
-  public async refreshAccounts() {
-    const accs = await this.web3.eth.getAccounts();
-    if (accs.length === 0) {
-      console.warn('No account connected');
-      return;
+      ],
+      "name": "prestar",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "stateMutability": "payable",
+      "type": "receive"
     }
-    if (this.accountsLoaded.length === 0 || this.accountsLoaded.length !== accs.length || this.accountsLoaded[0].address !== accs[0]) {
-      console.log('Observed new accounts!');
-      let accountsTmp: AccountWeb3Model[] = [];
-      for (let i = 0; i < accs.length; i++) {
-        const currentBalance = await this.web3.eth.getBalance(accs[i]);
-        accountsTmp.push(new AccountWeb3Model().build(accs[i], Number(currentBalance)));
-      }
-      this.accountsLoaded = accountsTmp;
-      this.accountsObservable.next(this.accountsLoaded);
-      console.log(this.accountsLoaded);
+  ];
+
+  constructor() {
+    // Inicialización de web3 en un método separado para evitar conflictos asincrónicos
+    this.initWeb3();
+  
+    // Verificar si Metamask está disponible
+    if (window.ethereum) {
+      // Solicitar permiso al usuario para acceder a sus cuentas
+      window.ethereum.enable().then(() => {
+        // Inicializar web3 con el proveedor de Ethereum de Metamask
+        this.web3 = new Web3(window.ethereum);
+  
+        // Crear un contrato inteligente con la ABI y la dirección del contrato
+        this.contract = new this.web3.eth.Contract(this.ABI, this.contractAddress);
+      }).catch((error: Error) => {
+        console.error('Error al solicitar permiso de Metamask:', error);
+      });
+    } else {
+      // Informar al usuario que Metamask no está instalado o habilitado
+      console.warn('Metamask no encontrado. Instala o habilita Metamask.');
     }
   }
 
-  async getAccountInfo(): Promise<AccountWeb3Model> {
-    const accounts = await this.web3js.eth.getAccounts();
+  async initWeb3() {
+    if (window.ethereum) {
+      await window.ethereum.enable();
+      this.web3 = new Web3(window.ethereum);
+      this.contract = new this.web3.eth.Contract(this.ABI, this.contractAddress);
+    } else {
+      console.warn('Metamask not found. Install or enable Metamask.');
+    }
+  }
+
+
+
+
+
+  async getAddress(): Promise<string> {
+    if (!this.web3) {
+      await this.initWeb3();
+    }
+    const accounts = await this.web3.eth.getAccounts();
     if (accounts.length > 0) {
-      const balance = await this.web3js.eth.getBalance(accounts[0]);
-      return new AccountWeb3Model().build(accounts[0], Number(balance));
+      return accounts[0];
+    } else {
+      console.error('No se encontraron direcciones de Metamask vinculadas.');
+      return ''; // Or return an empty string to indicate no address
     }
-    return new AccountWeb3Model();
   }
 
-  async solicitarPrestamo(destinatario: string, monto: number, interes: number) {
-    const accounts = await this.web3js.eth.getAccounts();
-    return this.contract.methods.solicitarPrestamo(destinatario, monto, interes).send({ from: accounts[0] });
+
+  async getBalance(): Promise<number> {
+    if (!this.web3) {
+      await this.initWeb3();
+    }
+    const address = await this.getAddress();
+    if (address) {
+      const balanceWei = await this.web3.eth.getBalance(address);
+      const balanceEther = parseFloat(this.web3.utils.fromWei(balanceWei, 'ether'));
+      return balanceEther;
+    } else {
+      console.error('No se pudo obtener la dirección para consultar el saldo.');
+      return 0; // Or return 0 to indicate unknown balance
+    }
   }
 
-  async aceptarPrestamo(prestatario: string) {
-    const accounts = await this.web3js.eth.getAccounts();
-    return this.contract.methods.aceptarPrestamo(prestatario).send({ from: accounts[0] });
-  }
+  async sendTransaction(toAddress: string, amount: number)   {
 
-  async aceptarPrestamoDestinatario(prestatario: string) {
-    const accounts = await this.web3js.eth.getAccounts();
-    return this.contract.methods.aceptarPrestamoDestinatario(prestatario).send({ from: accounts[0] });
-  }
+    window.ethereum.enable().then(() => {
+        this.web3 = new Web3(window.ethereum);
+        this.contract = new this.web3.eth.Contract(this.ABI, toAddress);
+      });
+    const accounts = await this.web3.eth.getAccounts();
+    const fromAddress = accounts[0];
 
-  async pagarPrestamo(monto: number) {
-    const accounts = await this.web3js.eth.getAccounts();
-    return this.contract.methods.pagarPrestamo().send({ from: accounts[0], value: monto });
-  }
+    const amountWei = this.web3.utils.toWei(amount.toString(), 'ether');
 
-  async consultarPrestamo(prestatario: string) {
-    const accounts = await this.web3js.eth.getAccounts();
-    return this.contract.methods.prestamos(prestatario).call({ from: accounts[0] });
+    return this.contract.methods.prestar(toAddress, amountWei).send({ from: fromAddress, value: amountWei });
   }
+  
 }
