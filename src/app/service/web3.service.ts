@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-
 import Web3 from 'web3';
 
 declare let window: any;
@@ -73,10 +72,6 @@ export class Web3Service {
     }
   }
 
-
-
-
-
   async getAddress(): Promise<string> {
     if (!this.web3) {
       await this.initWeb3();
@@ -89,7 +84,6 @@ export class Web3Service {
       return ''; // Or return an empty string to indicate no address
     }
   }
-
 
   async getBalance(): Promise<number> {
     if (!this.web3) {
@@ -106,18 +100,14 @@ export class Web3Service {
     }
   }
 
-  async sendTransaction(toAddress: string, amount: number)   {
-
+  async sendTransaction(toAddress: string, amount: number) {
     window.ethereum.enable().then(() => {
-        this.web3 = new Web3(window.ethereum);
-        this.contract = new this.web3.eth.Contract(this.ABI, toAddress);
-      });
+      this.web3 = new Web3(window.ethereum);
+      this.contract = new this.web3.eth.Contract(this.ABI, toAddress);
+    });
     const accounts = await this.web3.eth.getAccounts();
     const fromAddress = accounts[0];
-
     const amountWei = this.web3.utils.toWei(amount.toString(), 'ether');
-
     return this.contract.methods.prestar(toAddress, amountWei).send({ from: fromAddress, value: amountWei });
   }
-  
 }

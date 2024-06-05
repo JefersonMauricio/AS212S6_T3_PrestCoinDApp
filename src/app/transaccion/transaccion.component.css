@@ -4,6 +4,7 @@ body {
 
 .card {
   border-radius: 15px;
+  transition: transform 0.3s ease-in-out;
 }
 
 .card-header {
@@ -19,17 +20,17 @@ body {
 }
 
 .header-blockchain {
-  background: linear-gradient(90deg, #2e7d32, #4caf50);
+  background: linear-gradient(90deg, #a00e63, #0d0e0d);
   color: white;
 }
 
 .btn-primary {
-  background: #4caf50;
+  background: linear-gradient(90deg, #a00e63, #0d0e0d);;
   border: none;
 }
 
 .btn-primary:hover {
-  background: #388e3c;
+  background: #0c0c0c;
 }
 
 .form-control {
@@ -46,4 +47,21 @@ body {
 
 .mt-4, .my-4 {
   margin-top: 1.5rem !important;
+}
+
+.card-animate:hover {
+  transform: translateY(-10px);
+}
+
+.card-animate {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeInUp 0.5s forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

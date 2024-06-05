@@ -6,8 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "test-headless": "ng test --browsers ChromeHeadless"
+    "test": "ng test"
   },
   "private": true,
   "dependencies": {
@@ -21,7 +20,7 @@
     "@angular/platform-browser": "^17.0.0",
     "@angular/platform-browser-dynamic": "^17.0.0",
     "@angular/router": "^17.0.0",
-    "@ng-select/ng-select": "^5.0.8",
+    "@ng-select/ng-select": "^13.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "web3": "^4.9.0",
@@ -38,7 +37,6 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "puppeteer": "^22.10.0",
     "typescript": "~5.2.2"
   }
 }
