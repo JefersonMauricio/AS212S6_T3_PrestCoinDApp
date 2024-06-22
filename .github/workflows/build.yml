@@ -2,10 +2,7 @@ name: Build
 on:
   push:
     branches:
-      - master
       - Frontend
-  pull_request:
-    types: [opened, synchronize, reopened]
 jobs:
   #SONARCLOUD
   sonarcloud:
