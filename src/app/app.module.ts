@@ -15,14 +15,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TransaccionComponent } from './transaccion/transaccion.component';
 import { NavigationComponent } from './navigation/navigation.component';
-
+import { DevelopersComponent } from './developers/developers.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     TransaccionComponent,
-    NavigationComponent
+    NavigationComponent,
+    DevelopersComponent,
   ],
   imports: [
     BrowserModule,
