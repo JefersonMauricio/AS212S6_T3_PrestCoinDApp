@@ -8,7 +8,7 @@ RUN npm install @ng-select/ng-select@13.1.0 --force
 
 COPY . /app
 
-RUN npm run build --prod
+RUN npm run build --prod --stats-json
 
 EXPOSE 4200
 
