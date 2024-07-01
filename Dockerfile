@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY package*.json /app
 
-RUN npm install @ng-select/ng-select@13.1.0 --force
+RUN npm install @ng-select/ng-select@11.0.0 --force
 
 COPY . /app
 
