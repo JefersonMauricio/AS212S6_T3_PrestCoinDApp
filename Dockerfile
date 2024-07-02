@@ -1,16 +1,13 @@
-FROM node:20
+# Usar nginx como base
+FROM nginx:alpine
 
-WORKDIR /app
+# Copiar la carpeta de construcción al directorio correcto para nginx
+COPY dist/my-app/browser /usr/share/nginx/html
 
-COPY package*.json /app
-
-RUN npm install @ng-select/ng-select@11.0.0 --force
-
-COPY . /app
-
-RUN npm run build --prod
-
+# Exponer el puerto 4200
 EXPOSE 4200
 
 ENTRYPOINT ["npm", "start"]
 
+#docker build -t angelolm/unificado .
+#docker run -p 4200:4200 angelolm/unificado 
