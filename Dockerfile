@@ -7,7 +7,8 @@ COPY dist/my-app/browser /usr/share/nginx/html
 # Exponer el puerto 4200
 EXPOSE 4200
 
-ENTRYPOINT ["npm", "start"]
+# Modificar la configuración de nginx para escuchar en el puerto 4200
+RUN echo "server { listen 4200; root /usr/share/nginx/html; index index.html index.htm; location / { try_files \$uri \$uri/ /index.html; } }" > /etc/nginx/conf.d/default.conf
 
 #docker build -t angelolm/unificado .
 #docker run -p 4200:4200 angelolm/unificado 
