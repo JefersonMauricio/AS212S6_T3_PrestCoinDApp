@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PRESTCOIN</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <link rel="stylesheet" href="transaccion.component.css">
+  <style>
+    body {
+      background: #75486c;
+    }
+  </style>
+</head>
+<body class="full-height">
+  <div class="container">
+    <div class="row justify-content-center mb-4">
+      <div class="col-lg-3 text-center animated btn-meta">
+        <button class="btn btn-primary" (click)="connectWallet()">
+          <i class="fas fa-sign-in-alt"></i> INICIAR SESIÓN
+        </button>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-lg-4 animated">
+        <div class="card shadow-lg h-100">
+          <div class="card-header header-blockchain text-center">
+            <h4><i class="fas fa-user-circle"></i> TUS DATOS </h4>
+          </div>
+          <div class="card-body">
+            <div class="mb-8">
+              <h5><i class="fas fa-user"></i> DIRECCIÓN DE TU CUENTA </h5>
+              <p class="text-muted">{{ address }}</p>
+            </div>
+            <div class="mb-6">
+              <h5><i class="fas fa-wallet"></i> SALDO DE TU CUENTA </h5>
+              <p class="text-muted">{{ balance }} ETH</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 animated">
+        <div class="card shadow-lg h-100">
+          <div class="card-header header-blockchain text-center">
+            <h4><i class="fas fa-paper-plane"></i> TRANSACCIÓN </h4>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="transactionForm" (ngSubmit)="sendTransaction()">
+              <div class="form-group">
+                <label for="toAddress"><i class="fas fa-address-card"></i> DIRECCIÓN DEL DESTINATARIO</label>
+                <input type="text" id="toAddress" formControlName="toAddress" class="form-control" placeholder="Introduce la dirección">
+              </div>
+              <div class="form-group">
+                <label for="amount"><i class="fas fa-coins"></i> CANTIDAD (ETH)</label>
+                <input type="number" id="amount" formControlName="amount" class="form-control" placeholder="Introduce la cantidad">
+              </div>
+              <div class="text-center">
+                <button type="submit" class="btn btn-custom-primary">
+                  <i class="fas fa-paper-plane"></i> ENVIAR PRESTAMO
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Botón para desconectar la cartera -->
+    <div class="row justify-content-center mt-4">
+      <div class="col-lg-3 text-center animated btn-meta">
+        <button class="btn btn-custom-danger" (click)="disconnectWallet()">
+          <i class="fas fa-sign-out-alt"></i> DESCONECTAR
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Pie de página -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <p>&copy; 2024 PrestCoin. Todos los derechos reservados.</p>
+          <p>Síguenos en 
+            <a href="https://www.facebook.com/tecnologiaVG?locale=es_LA" target="_blank"><i class="fab fa-facebook"></i></a>
+            <a href="https://github.com/vallegrande" target="_blank"><i class="fab fa-github"></i></a>
+            <a href="https://www.linkedin.com/company/tecnologiavg/" target="_blank"><i class="fab fa-linkedin"></i></a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS y dependencias opcionales -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
